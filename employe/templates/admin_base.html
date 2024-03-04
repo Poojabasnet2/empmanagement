@@ -51,8 +51,9 @@ new DataTable('#example', {
           <a href="{% url 'admin_home' %}" class="list-group-item list-group-item-danger list-group-item-action">Dashboard</a>
           <a href="{% url 'add_employee' %}" class="list-group-item list-group-item-danger list-group-item-action">Add Employee</a>
           <a href="{% url 'all_employee' %}" class="list-group-item list-group-item-danger list-group-item-action">All Employee</a>
-          <a href="#" class="list-group-item list-group-item-danger list-group-item-action">Add Attendance</a>
-          <a href="#" class="list-group-item list-group-item-danger list-group-item-action">Leave</a>
+          <a href="{% url 'department' %}" class="list-group-item list-group-item-danger list-group-item-action">Add Department</a>
+          <a href="{% url 'leave_view' %}" class="list-group-item list-group-item-danger list-group-item-action">ViewLeave</a>
+           <a href="{% url 'view_department' %}" class="list-group-item list-group-item-danger list-group-item-action">Department</a>
           <a href="#" class="list-group-item list-group-item-danger list-group-item-action">Salary Report</a>
           <a href="{% url 'logout' %}" class="list-group-item list-group-item-danger list-group-item-action">Logout</a>
         </div>

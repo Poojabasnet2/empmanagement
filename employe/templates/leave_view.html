@@ -1,0 +1,63 @@
+{% extends 'admin_base.html' %}
+{% block main %}
+
+<div class="card shadow m-5">
+    <div class="card-body">
+        <h5 class="p-5, text-primary" style="border-bottom : 2px solid blue">Employee Leave</h5>
+        <div class="container-fluid">
+            <table class="table table-bordered" id="example">
+                <thead class="text-light bg-primary">
+                    <tr>
+                        <th>S NO.</th>
+                        <th>Emp Code</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Reason</th>
+                        <th>Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                {% for i in employee_leave %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{i.empcode}}</td>
+                    <td>{{i.user.first_name}}</td>
+                    <td>{{i.user.last_name}}</td>
+                    <td>{{i.start_date}}</td>
+                    <td>{{i.End_date}}</td>
+                    <td>{{i.data}}</td>
+
+                    <td>
+                        <div class="action">
+                            {% if i.status == 0 %}
+                            <a href="{% url 'approve_leave' i.id %}" class="btn btn-success">Approve</a>
+                            <a href="{% url 'Disapprove_leave' i.id %}" class="btn btn-danger">DisApprove</a>
+
+                            {% elif i.status == 1 %}
+                            <button class="btn btn-success" disabled="disabled">Approved</button>
+
+                            {% else %}
+                            <button class="btn btn-danger" disabled="disabled">DisApproved</button>
+
+                            {% endif %}
+
+                        </div>
+                    </td>
+
+
+                </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

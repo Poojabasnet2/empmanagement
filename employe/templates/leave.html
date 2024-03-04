@@ -1,0 +1,115 @@
+{% extends 'emp_base.html' %}
+
+{% block main %}
+<div class="card shadow m-2">
+    <div class="card-body">
+        <h5 class="p-3 text-danger border-bottom border-orange">Apply Leave</h5>
+    </div>
+    {% include 'messages.html' %}
+
+    <div class="container-fluid p-3">
+        <form method="post" action="{% url 'leave_request' %}">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="col-sm-6 mb-3">
+                    <label for="start">Start Date</label>
+                    <input type="date" name="start" class="form-control" id="start" required>
+
+                </div>
+                <div class="col-sm-6 mb-3">
+                    <label for="end">End Date</label>
+                    <input type="date" name="end" class="form-control" id="end" required>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="reason">Leave Reason</label>
+                <textarea class="form-control" name="reason" id="reason" rows="4" required></textarea>
+
+            </div>
+            <button type="submit" class="btn btn-primary mr-2">Apply</button>
+            <button class="btn btn-outline-primary" data-toggle="modal" data-target=".bd-example-modal-lg" type="button">
+                <i class="fas fa-history"></i> Leave History
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Leave History Modal -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="leaveHistoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="leaveHistoryModalLabel">Leave History</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card shadow m-5">
+    <div class="card-body">
+        <h5 class="p-5, text-danger" style="border-bottom : 2px solid orange">Employee Details</h5>
+        <div class="container-fluid">
+            <table class="table table-bordered" id="example">
+                <thead class="text-light bg-danger">
+                    <tr>
+                        <th>S NO.</th>
+                        <th>Start date</th>
+                        <th>End Date</th>
+                        <th>Reason</th>
+
+                        <th>status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for i in leave_history %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{i.start_date}}</td>
+                    <td>{{i.End_date}}</td>
+                    <td>{{i.data}}</td>
+
+                    <td>
+                        <div class="action">
+                            {% if i.status == 0 %}
+                            <span class="badge badge-info">Pending</span>
+
+
+                            {% elif i.status == 1 %}
+                            <span class="badge badge-success">Approve</span>
+
+
+                            {% else %}
+                            <span class="badge badge-danger">Rejected</span>
+
+
+                            {% endif %}
+                        </div>
+                    </td>
+
+
+
+
+                </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

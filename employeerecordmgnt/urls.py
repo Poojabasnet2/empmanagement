@@ -23,5 +23,11 @@ urlpatterns = [
     path('add_employee',add_employee,name='add_employee'),
     path('edit_employee/<int:pid>/', edit_employee, name='edit_employee'),
     path('delete/<int:pid>/', views.delete, name='delete'),
-
+    path('leave', leave,name='leave'),
+    path('leave_request/', leave_request, name='leave_request'),
+    path('leave_view',leave_view,name='leave_view'),
+    path('approve_leave/<int:id>',approve_leave,name='approve_leave'),
+    path('Disapprove_leave/<int:id>',Disapprove_leave,name='Disapprove_leave'),
+    path('department',department,name='department'),
+    path('view_department',view_department,name='view_department')
  ]

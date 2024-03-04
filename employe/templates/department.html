@@ -1,0 +1,29 @@
+{% extends 'admin_base.html' %}
+{% block content %}
+
+{% block main %}
+<div class="card shadow m-2">
+    <div class="card-body">
+        <h5 class="p-3 text-danger border-bottom border-orange">Department</h5>
+    </div>
+    {% include 'messages.html' %}
+
+    <div class="container-fluid p-3">
+        <form method="post" action="{% url 'department' %}">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="col-sm-6 mb-3">
+                    <label>Department</label>
+                    <input type="text" class="form-control" name="dept" required>
+                </div>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-danger" data-dismiss="modal">Add department</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% endblock %}

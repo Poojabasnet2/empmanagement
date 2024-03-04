@@ -11,6 +11,9 @@ from django.shortcuts import render, get_object_or_404
 import employe
 from .models import *
 from django.contrib.auth import login, logout, authenticate
+from django.contrib import messages
+
+from .models import Employee_leave
 
 
 def index(request):
@@ -63,7 +66,7 @@ def profile(request):
     if request.method == "POST":
         fn = request.POST['firstname']
         ln = request.POST['lastname']
-        ec = request.POST['employeecode']
+        ec = request.POST['empcode']
         department = request.POST['dept']
         contact = request.POST['contact']
         jdate = request.POST['jdate']
@@ -71,7 +74,7 @@ def profile(request):
         employee.user.first_name = fn
         employee.user.last_name = ln
         employee.empcode = ec
-        employee.dept = department
+        employee.empdept = department
         employee.contact = contact
         employee.joiningdate = jdate
 
@@ -132,22 +135,24 @@ def all_employee(request):
 
 def add_employee(request):
     error = ""
+    departments = Department.objects.all()  # Retrieve all departments
     if request.method == "POST":
         fn = request.POST['firstname']
         ln = request.POST['lastname']
-        ec = request.POST['employeecode']
+        ec = request.POST['empcode']
         em = request.POST['email']
         pw = request.POST['P']
         da = request.POST['jdate']
+        dept_id = request.POST['dept']
 
         try:
             user = User.objects.create_user(first_name=fn, last_name=ln, username=em, password=pw)
-            EmployeeDetails.objects.create(user=user, empcode=ec)
+            department = Department.objects.get(id=dept_id)
+            EmployeeDetails.objects.create(user=user, empcode=ec, department=department)
             error = "no"
         except:
             error = "yes"
-    return render(request, 'add_employee.html', locals())
-
+    return render(request, 'add_employee.html', {'error': error, 'departments': departments})
 
 def edit_employee(request, pid):
     error = ""
@@ -187,3 +192,83 @@ def delete(request, pid):
     if request.method == 'POST':
         employee.delete()
         return redirect('all_employee')
+
+def leave(request):
+
+    employee = get_object_or_404(EmployeeDetails, user=request.user)
+
+
+    request_user = employee.user
+
+
+    leave_history = Employee_leave.objects.filter(user=request_user)
+
+    context = {
+        'leave_history': leave_history
+    }
+
+    return render(request, 'leave.html', context)
+
+def leave_request(request):
+    if request.method == 'POST':
+        start_date=request.POST.get('start')
+        End_date=request.POST.get('end')
+        Reason=request.POST.get('reason')
+
+        current_user=request.user
+        leave_request=Employee_leave.objects.create(
+            user=current_user,
+            start_date=start_date,
+            End_date=End_date,
+            message=Reason,
+            status=0,
+        )
+        messages.success(request,'Request  sent successfully')
+
+        return render(request,'leave.html')
+
+
+def leave_view(request):
+    employee_leave=Employee_leave.objects.all()
+    context={
+        'employee_leave': employee_leave,
+    }
+    return render(request,'leave_view.html',context)
+
+
+def approve_leave(request,id):
+    leave=Employee_leave.objects.get(id=id)
+    leave.status=1
+    leave.save()
+    return redirect(leave_view)
+
+def Disapprove_leave(request,id):
+    leave=Employee_leave.objects.get(id=id)
+    leave.status=2
+    leave.save()
+    return redirect(leave_view)
+
+def department(request):
+    departments = Department.objects.all()
+
+    if request.method == "POST":
+        name = request.POST.get('dept')  # Assuming 'name' is the field name in your form
+
+        # Create a new Department instance and save it
+        new_department = Department(name=name)
+        new_department.save()
+
+        messages.success(request, 'Department successfully added')
+        return redirect('department')  # Redirect to the same page after adding a department
+
+    context = {
+        'departments': departments,  # Pass the queryset to the template
+    }
+    return render(request, 'department.html', context)
+
+def view_department(request):
+    department=Department.objects.all()
+    context={
+        'department': department,
+    }
+    return render(request,'view_department.html',context)
