@@ -9,12 +9,13 @@
                 <thead class="text-light bg-primary">
                     <tr>
                         <th>S NO.</th>
-                        <th>Emp Code</th>
+
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Reason</th>
+                        <th>Total</th>
                         <th>Action</th>
 
                     </tr>
@@ -23,12 +24,13 @@
                 {% for i in employee_leave %}
                 <tr>
                     <td>{{forloop.counter}}</td>
-                    <td>{{i.empcode}}</td>
+
                     <td>{{i.user.first_name}}</td>
                     <td>{{i.user.last_name}}</td>
                     <td>{{i.start_date}}</td>
                     <td>{{i.End_date}}</td>
-                    <td>{{i.data}}</td>
+                    <td>{{i.message}}</td>
+                    <td>{{i.total_days}}</td>
 
                     <td>
                         <div class="action">

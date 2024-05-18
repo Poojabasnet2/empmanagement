@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary List</title>
+</head>
+<body>
+    <h1>Salary List</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Employee</th>
+                <th>Date</th>
+                <th>Month</th>
+                <th>Present Days</th>
+                <!-- <th>Leave Days</th> -->
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for salary_entry in salary %}
+            <tr>
+                <td>{{ salary_entry.employee.user.username }}</td>
+                <td>{{ salary_entry.date }}</td>
+                <td>{{ salary_entry.get_month_display }}</td>  <!-- Display month name -->
+                <td>{{ salary_entry.present_day }}</td>
+                <!-- <td>{{ salary_entry.leave }}</td> -->
+                <td>{{ salary_entry.amount }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

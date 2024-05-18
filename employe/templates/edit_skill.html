@@ -1,0 +1,23 @@
+{% extends 'emp_base.html' %}
+{% block main %}
+
+<div class="card shadow m-5">
+    <div class="card-body">
+        <h5 class="p-5 text-primary" style="border-bottom: 2px solid orange">Edit Skill</h5>
+        <div class="container-fluid">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="skill_name">Skill Name</label>
+                    <input type="text" class="form-control" id="skill_name" name="skill_name" value="{{ skill.skill_name }}">
+                </div>
+                <div class="form-group">
+                    <label for="proficiency_level">Proficiency Level</label>
+                    <input type="text" class="form-control" id="proficiency_level" name="proficiency_level" value="{{ skill.proficiency_level }}">
+                </div>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

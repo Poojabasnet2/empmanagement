@@ -4,8 +4,8 @@
 {% block main %}
 <script>
 <!--    function generateEmployeeCode() {-->
-<!--        var firstName = document.signup.firstname.value.trim();-->
-<!--        var lastName = document.signup.lastname.value.trim();-->
+<!--        var firstName = document.getElementById('firstname').value.trim();-->
+<!--        var lastName = document.getElementById('lastname').value.trim();-->
 
 <!--        if (firstName && lastName) {-->
 <!--            var randomNumber = Math.floor(Math.random() * 9000) + 1000;-->
@@ -13,28 +13,28 @@
 <!--            var lastInitial = lastName.charAt(0).toUpperCase();-->
 <!--            var employeeCode = firstInitial + lastInitial + randomNumber;-->
 
-<!--            document.signup.empcode.value = employeeCode;-->
-<!--        } else {-->
-<!--            alert("Please fill in both first name and last name before submitting.");-->
-<!--            return false;-->
+<!--            document.getElementById('empcode').value = employeeCode;-->
 <!--        }-->
+
+<!--        // Return true regardless of whether employee code is generated or not-->
+<!--        // This allows the form submission to proceed if other validations pass-->
 <!--        return true;-->
 <!--    }-->
 
     function checkPassword() {
-        var password = document.signup.P.value;
-        var confirmPassword = document.signup.C.value;
+        var password = document.getElementById('password').value;
+        var confirmPassword = document.getElementById('confirm_password').value;
 
         if (password !== confirmPassword) {
             alert('Password and Confirm Password do not match');
-            document.signup.C.focus();
+            document.getElementById('confirm_password').focus();
             return false;
         }
 
         var passwordRegex = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[@#$%^&+=]).{8,}$/;
         if (!passwordRegex.test(password)) {
             alert('Password must be at least 8 characters long and contain at least one letter, one number, and one special character');
-            document.signup.P.focus();
+            document.getElementById('password').focus();
             return false;
         }
 
@@ -48,31 +48,31 @@
     </div>
 
     <div class="container-fluid">
-        <form method="post" name="signup" onsubmit="return checkPassword"()>
+        <form method="post" name="signup" onsubmit="return generateEmployeeCode() && checkPassword();">
             {% csrf_token %}
             <div class="form-row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label>First Name</label>
-                        <input type="text" name="firstname" class="form-control" placeholder="Enter your first name" pattern="[A-Za-z]+" required>
+                        <label for="firstname">First Name</label>
+                        <input type="text" id="firstname" name="firstname" class="form-control" placeholder="Enter your first name" pattern="[A-Za-z]+" required>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label>Last Name</label>
-                        <input type="text" name="lastname" class="form-control" placeholder="Enter your last name" pattern="[A-Za-z]+" required>
+                        <label for="lastname">Last Name</label>
+                        <input type="text" id="lastname" name="lastname" class="form-control" placeholder="Enter your last name" pattern="[A-Za-z]+" required>
                     </div>
                 </div>
                 <div class="col-sm-12">
                     <div class="form-group">
-                        <label>Employee Code</label>
-                        <input type="number" name="empcode" class="form-control" placeholder="Employee code" required>
+                        <label for="empcode">Employee Code</label>
+                        <input type="text" id="empcode" name="empcode" class="form-control" placeholder="Employee code" readonly>
                     </div>
                 </div>
                 <div class="col-sm-12">
                     <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
                     </div>
                 </div>
 
@@ -90,20 +90,27 @@
 
                 <div class="col-sm-10">
                     <div class="form-group">
-                        <label>Joining Date</label>
-                        <input type="date" name="jdate" class="form-control" placeholder="Enter date joined" required>
+                        <label for="contact">Contact</label>
+                        <input type="number" id="contact" name="contact" class="form-control" placeholder="Enter contact" required>
+                    </div>
+                </div>
+
+                <div class="col-sm-10">
+                    <div class="form-group">
+                        <label for="jdate">Joining Date</label>
+                        <input type="date" id="jdate" name="jdate" class="form-control" placeholder="Enter date joined" required>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" name="P" class="form-control" placeholder="Enter password" required>
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="P" class="form-control" placeholder="Enter password" required>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label>Confirm Password</label>
-                        <input type="password" name="C" class="form-control" placeholder="Re-enter password" required>
+                        <label for="confirm_password">Confirm Password</label>
+                        <input type="password" id="confirm_password" name="C" class="form-control" placeholder="Re-enter password" required>
                     </div>
                 </div>
             </div>
@@ -114,14 +121,10 @@
 
 {% if error == "no" %}
 <script>
-    alert('Added successfully');
+    alert('Employee added successfully');
     window.location.href = ('{% url 'add_employee' %}');
 </script>
 {% endif %}
-{% if error == "yes" %}
-<script>
-    alert('Something went wrong, please try again');
-</script>
-{% endif %}
+
 
 {% endblock %}

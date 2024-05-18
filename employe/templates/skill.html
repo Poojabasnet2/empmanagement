@@ -1,0 +1,35 @@
+{% extends 'emp_base.html' %}
+{% block content %}
+{% block main %}
+<div class="card shadow m-2">
+    <div class="card-body">
+        <h5 class="p-3 text-danger border-bottom border-orange">AcquiredSkill</h5>
+    </div>
+    {% include 'messages.html' %}
+
+    <div class="container-fluid p-3">
+        <form method="post" action="{% url 'skill' %}">  <!-- Corrected form action -->
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="col-sm-6 mb-3">
+                    <label>SkillAcquired</label>
+                    <input type="text" class="form-control" name="skill_name" required>
+                </div>
+
+                <div class="col-sm-6 mb-3">
+                    <label>Proficiency_Level</label>
+                    <input type="text" class="form-control" name="proficiency_level" required>
+                </div>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-danger" data-dismiss="modal">Add Skill</button>
+            </div><br/>
+
+            <div class="col-6">
+                <a href="{% url 'skill_list' %}" class="btn btn-primary">View Skill List</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% endblock %}

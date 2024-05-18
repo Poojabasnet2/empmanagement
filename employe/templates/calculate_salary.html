@@ -1,0 +1,95 @@
+{% extends 'admin_base.html' %}
+{% block main %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate Salary</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function fetchEmployeeData(employeeId) {
+                $.ajax({
+                    type: "GET",
+                    url: "/get_employee_data/",
+                    data: {
+                        employee_id: employeeId
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.success) {
+                            $('#salary_rate').val(response.salary_rate);
+                            $('#leave').val(response.approved_leave_days);
+                            updateSalary();
+                        } else {
+                            console.error('Error: ' + response.error);
+                        }
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        console.error('AJAX Request Failed: ' + errorThrown);
+                    }
+                });
+            }
+
+            function updateSalary() {
+                var salaryRate = parseFloat($('#salary_rate').val());
+                var leaveDays = parseInt($('#leave').val());
+                var salary = salaryRate - (salaryRate * leaveDays / 30); // Assuming a month has 30 days
+                $('#salary').val(salary.toFixed(2));
+            }
+
+            $('#employee_id').change(function() {
+                var employeeId = $(this).val();
+                fetchEmployeeData(employeeId);
+            });
+
+            var initialEmployeeId = $('#employee_id').val();
+            fetchEmployeeData(initialEmployeeId);
+        });
+    </script>
+</head>
+<body>
+    <h1>Calculate Salary</h1>
+    <form method="post" action="{% url 'calculate_salary' %}">
+        {% csrf_token %}
+        <label for="employee_id">Select Employee:</label>
+        <select name="employee_id" id="employee_id" required>
+            {% for employee in employees %}
+                <option value="{{ employee.id }}">{{ employee.user.username }}</option>
+            {% endfor %}
+        </select><br><br>
+        <label for="salary_rate">Salary Rate:</label>
+        <input type="number" name="salary_rate" id="salary_rate" ><br><br>
+        <label for="month">Select Month:</label>
+        <select name="month" id="month" required>
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">November</option>
+            <option value="10">September</option>
+            <option value="11">October</option>
+            <option value="12">December</option>
+        </select><br><br>
+        <label for="present">Present_days:</label>
+        <input type="number" name="present_days" id="present" required readonly><br><br>
+        <label for="leave">Leave Days:</label>
+        <input type="number" name="leave" id="leave" required readonly><br><br>
+        <label for="salary">Calculated Salary:</label>
+        <input type="number" name="salary" id="salary" required readonly><br><br>
+        <input type="submit" value="Calculate Salary">
+    </form>
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
+{% endblock %}
